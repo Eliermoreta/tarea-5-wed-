@@ -1,0 +1,40 @@
+<EditForm Model="@videoGame" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="name">Nombre del Videojuego:</label>
+        <InputText id="name" @bind-Value="videoGame.Name" />
+    </div>
+    <div>
+        <label for="developer">Desarrollador:</label>
+        <InputText id="developer" @bind-Value="videoGame.Developer" />
+    </div>
+    <div>
+        <label for="platform">Plataforma:</label>
+        <InputSelect id="platform" @bind-Value="videoGame.PlatformId">
+            @foreach (var platform in platforms)
+            {
+                <option value="@platform.Id">@platform.Name</option>
+            }
+        </InputSelect>
+    </div>
+    <!-- Otros campos para género, fecha, imagen, etc. -->
+
+    <button type="submit">Registrar Videojuego</button>
+</EditForm>
+
+@code {
+    private VideoGame videoGame = new VideoGame();
+    private List<Platform> platforms;
+
+    protected override async Task OnInitializedAsync()
+    {
+        platforms = await PlatformService.GetPlatformsAsync();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await VideoGameService.AddVideoGameAsync(videoGame);
+    }
+}

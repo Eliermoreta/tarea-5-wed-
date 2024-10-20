@@ -1,0 +1,28 @@
+<EditForm Model="@platform" OnValidSubmit="@HandleValidSubmit">
+    <div>
+        <label for="name">Nombre de la Plataforma:</label>
+        <InputText id="name" @bind-Value="platform.Name" />
+    </div>
+    <div>
+        <label for="isActive">Estado:</label>
+        <InputCheckbox id="isActive" @bind-Value="platform.IsActive" />
+    </div>
+
+    <button type="submit">Guardar Plataforma</button>
+</EditForm>
+
+<button @onclick="DeletePlatform">Eliminar</button>
+
+@code {
+    private Platform platform = new Platform();
+
+    private async Task HandleValidSubmit()
+    {
+        await PlatformService.SavePlatformAsync(platform);
+    }
+
+    private async Task DeletePlatform()
+    {
+        await PlatformService.DeletePlatformAsync(platform.Id);
+    }
+}
